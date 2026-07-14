@@ -1,3 +1,10 @@
+## Ejecutar las pruebas
+
+Con el entorno virtual activado, ejecutar:
+
+```bash
+python -m pytest -v
+
 # Service Desk Uptime Monitor
 
 Aplicación web desarrollada para monitorizar la disponibilidad de servicios y medir sus tiempos de respuesta
