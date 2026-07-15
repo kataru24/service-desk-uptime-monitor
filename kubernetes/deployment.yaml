@@ -21,7 +21,7 @@ spec:
       containers:
         - name: uptime-monitor
 
-          image: ghcr.io/kataru24/service-desk-uptime-monitor:latest
+          image: ghcr.io/kataru24/service-desk-uptime-monitor:32d3ab0ac640f71e7617535fabc66d1bc35844a5
 
           imagePullPolicy: Always
 
