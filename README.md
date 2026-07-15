@@ -1,3 +1,74 @@
+## Seguridad del contenedor y Kubernetes
+
+La aplicación se ejecuta utilizando un usuario sin privilegios tanto en Docker como en Kubernetes.
+
+Medidas aplicadas en la imagen Docker:
+
+- Usuario dedicado `appuser`.
+- UID y GID fijos: `10001`.
+- Ejecución del proceso sin permisos de `root`.
+- Propiedad de los archivos asignada al usuario de la aplicación.
+- Generación de archivos `.pyc` deshabilitada.
+
+Medidas aplicadas en Kubernetes:
+
+- Ejecución obligatoria como usuario no-root.
+- UID y GID `10001`.
+- Escalada de privilegios deshabilitada.
+- Todas las capacidades Linux eliminadas.
+- Sistema de archivos raíz configurado como solo lectura.
+- Perfil seccomp `RuntimeDefault`.
+- Montaje automático del token de Service Account deshabilitado.
+- Requests y limits de CPU y memoria.
+
+Las restricciones se validaron directamente dentro de los Pods.
+
+Comprobar el usuario del contenedor:
+
+```bash
+kubectl exec \
+  --namespace uptime-monitor \
+  POD_NAME \
+  -- id
+```
+
+Resultado esperado:
+
+```text
+uid=10001(appuser) gid=10001(appuser) groups=10001(appuser)
+```
+
+Comprobar capacidades y escalada de privilegios:
+
+```bash
+kubectl exec \
+  --namespace uptime-monitor \
+  POD_NAME \
+  -- sh -c 'grep -E "^(NoNewPrivs|CapEff):" /proc/1/status'
+```
+
+Resultado esperado:
+
+```text
+CapEff:         0000000000000000
+NoNewPrivs:     1
+```
+
+Comprobar que el sistema de archivos raíz es de solo lectura:
+
+```bash
+kubectl exec \
+  --namespace uptime-monitor \
+  POD_NAME \
+  -- sh -c 'echo test > /code/security-test'
+```
+
+El comando debe fallar con un mensaje similar a:
+
+```text
+Read-only file system
+```
+
 ## Desplegar en Kubernetes
 
 El proyecto incluye manifiestos para desplegar la aplicación en un clúster Kubernetes.
