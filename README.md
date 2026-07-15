@@ -1,9 +1,70 @@
+## Usar la imagen publicada
+
+La imagen Docker se publica automáticamente en GitHub Container Registry después de superar las pruebas del pipeline.
+
+Descargar la última versión:
+
+```bash
+docker pull ghcr.io/kataru24/service-desk-uptime-monitor:latest
+```
+
+Ejecutar la imagen:
+
+```bash
+docker run --detach \
+  --rm \
+  --name uptime-monitor-ghcr \
+  --publish 8000:8000 \
+  ghcr.io/kataru24/service-desk-uptime-monitor:latest
+```
+
+Comprobar el estado:
+
+```bash
+curl http://localhost:8000/health
+```
+
+Detener el contenedor:
+
+```bash
+docker stop uptime-monitor-ghcr
+```
+
 ## Ejecutar con Docker
 
 Construir la imagen:
 
 ```bash
 docker build -t service-desk-uptime-monitor:0.2.0 .
+```
+
+Ejecutar el contenedor:
+
+```bash
+docker run --detach \
+  --rm \
+  --name service-desk-uptime-monitor \
+  --publish 8000:8000 \
+  service-desk-uptime-monitor:0.2.0
+```
+
+Comprobar el estado:
+
+```bash
+curl http://localhost:8000/health
+```
+
+Abrir la documentación:
+
+```text
+http://localhost:8000/docs
+```
+
+Detener el contenedor:
+
+```bash
+docker stop service-desk-uptime-monitor
+```
 
 ## Ejecutar las pruebas
 
