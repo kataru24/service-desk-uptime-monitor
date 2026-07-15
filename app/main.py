@@ -7,7 +7,7 @@ from app.schemas import URLCheckRequest, URLCheckResponse
 app = FastAPI(
     title="Service Desk Uptime Monitor",
     description="API para monitorizar la disponibilidad de servicios.",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 
@@ -23,6 +23,12 @@ def home() -> dict[str, str]:
 def health() -> dict[str, str]:
     return {
         "status": "healthy",
+    }
+
+@app.get("/version")
+def version() -> dict[str, str]:
+    return {
+        "version": "0.3.0",
     }
 
 

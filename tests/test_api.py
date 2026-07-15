@@ -26,6 +26,13 @@ def test_health_endpoint() -> None:
         "status": "healthy",
     }
 
+def test_version_endpoint() -> None:
+    response = client.get("/version")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "version": "0.3.0",
+    }
 
 def test_check_endpoint_rejects_invalid_url() -> None:
     response = client.post(
