@@ -18,12 +18,31 @@ spec:
         app: service-desk-uptime-monitor
 
     spec:
+      automountServiceAccountToken: false
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+
+        seccompProfile:
+          type: RuntimeDefault
+
       containers:
         - name: uptime-monitor
 
-          image: ghcr.io/kataru24/service-desk-uptime-monitor:32d3ab0ac640f71e7617535fabc66d1bc35844a5
+          image: ghcr.io/kataru24/service-desk-uptime-monitor:910e0f5b7f6d04da223c683dcf5debc51029ab2f
 
           imagePullPolicy: Always
+
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+            capabilities:
+              drop:
+                - ALL
 
           ports:
             - name: http
