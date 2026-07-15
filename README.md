@@ -1,6 +1,63 @@
+## Desplegar en Kubernetes
+
+El proyecto incluye manifiestos para desplegar la aplicación en un clúster Kubernetes.
+
+La arquitectura utiliza:
+
+- Un namespace dedicado.
+- Un Deployment con dos réplicas.
+- Readiness y liveness probes.
+- Límites y solicitudes de recursos.
+- Un Service de tipo ClusterIP.
+
+Aplicar los manifiestos:
+
+```bash
+kubectl apply -f kubernetes/namespace.yaml
+
+kubectl apply -f kubernetes/deployment.yaml
+
+kubectl apply -f kubernetes/service.yaml
+```
+
+Comprobar el estado del despliegue:
+
+```bash
+kubectl rollout status \
+  deployment/service-desk-uptime-monitor \
+  --namespace uptime-monitor
+```
+
+Mostrar los Pods:
+
+```bash
+kubectl get pods --namespace uptime-monitor
+```
+
+Acceder temporalmente a la aplicación:
+
+```bash
+kubectl port-forward \
+  --namespace uptime-monitor \
+  service/service-desk-uptime-monitor \
+  8080:8000
+```
+
+Abrir la documentación:
+
+```text
+http://localhost:8080/docs
+```
+
+Comprobar el health check:
+
+```bash
+curl http://localhost:8080/health
+```
+
 ## Usar la imagen publicada
 
-La imagen Docker se publica automáticamente en GitHub Container Registry después de superar las pruebas del pipeline.
+La imagen Docker se publica automáticamente en GitHub Container Registry después de superar las pruebas del pipeline
 
 Descargar la última versión:
 

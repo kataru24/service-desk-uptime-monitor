@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: service-desk-uptime-monitor
+  namespace: uptime-monitor
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: service-desk-uptime-monitor
+
+  template:
+    metadata:
+      labels:
+        app: service-desk-uptime-monitor
+
+    spec:
+      containers:
+        - name: uptime-monitor
+
+          image: ghcr.io/kataru24/service-desk-uptime-monitor:latest
+
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 8000
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+
+            limits:
+              cpu: 500m
+              memory: 256Mi
