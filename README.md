@@ -1,3 +1,10 @@
+## Ejecutar con Docker
+
+Construir la imagen:
+
+```bash
+docker build -t service-desk-uptime-monitor:0.2.0 .
+
 ## Ejecutar las pruebas
 
 Con el entorno virtual activado, ejecutar:
